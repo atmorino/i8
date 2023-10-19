@@ -45,6 +45,10 @@ Common Styles
 =======================================*/
 header {
 	padding: 48px;
+	text-align: center;
+}
+header img {
+	width: 64px;
 }
 .test01 {
 	font-size: 1.6em;/* 16px*/
@@ -53,18 +57,19 @@ a:hover {
 	opacity: 0.8;
 	filter: alpha(opacity=80);
 }
-
-footer{
+footer {
 	position: absolute;
 	bottom: 0;
 	display:block;
 	width:100%;
-	font-size: 0.8em;
+	font-size: 0.9em;
 	text-align: center;
 	padding-bottom: 24px;
 }
 
 /*****for mobile*****/
 @media(max-width:600px){
-
+header img {
+	 width: 128px;
+}
 }/*****for mobile*****/
