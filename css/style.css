@@ -1,0 +1,70 @@
+@charset "utf-8";
+
+/*======================================
+Base Styles
+=======================================*/
+html {
+	font-size: 62.5%;
+}
+body {
+	font-size:1.6em;/* 16px*/
+	line-height: 2.0;
+	margin: 0px;
+	font-family: 'Roboto', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+	color: #333;
+	background: #fff;
+}
+input, textarea {
+	font-family: 'Roboto', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
+	font-size: 100%;
+	line-height: 1.3;
+}
+input {
+	height: 1.3em;
+}
+img {
+	border: 0;
+}
+p, h1, h2, h3, h4, h5, h6, img, dl, dt, dd, form, input, textarea, fieldset, pre, blockquote {
+	margin: 0;
+	padding: 0;
+}
+ul, ol {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+a:link {color:#379DB6; text-decoration: none;}
+a:visited {color:#379DB6;}
+a:hover {color:#379DB6; opacity: 0.5;}
+a:active {color:#379DB6;}
+
+/*======================================
+Common Styles
+=======================================*/
+header {
+	padding: 48px;
+}
+.test01 {
+	font-size: 1.6em;/* 16px*/
+}
+a:hover {
+	opacity: 0.8;
+	filter: alpha(opacity=80);
+}
+
+footer{
+	position: absolute;
+	bottom: 0;
+	display:block;
+	width:100%;
+	font-size: 0.8em;
+	text-align: center;
+	padding-bottom: 24px;
+}
+
+/*****for mobile*****/
+@media(max-width:600px){
+
+}/*****for mobile*****/
