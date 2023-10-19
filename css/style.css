@@ -47,7 +47,7 @@ header {
 	padding: 48px;
 	text-align: center;
 }
-header img {
+header .logo {
 	width: 64px;
 }
 .test01 {
@@ -69,7 +69,7 @@ footer {
 
 /*****for mobile*****/
 @media(max-width:600px){
-header img {
-	 width: 128px;
+header .logo {
+	 width: 96px;
 }
 }/*****for mobile*****/
