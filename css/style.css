@@ -4,11 +4,12 @@
 Base Styles
 =======================================*/
 body {
-	line-height: 1.5;
+	line-height: 1.75;
 	margin: 0px;
 	font-family: 'Roboto', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
-	color: #333;
-	background: #fff;
+    font-size: 1rem;
+	color: #D4D3DD;
+	background: #2E2D33;
 }
 input, textarea {
 	font-family: 'Roboto', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Meiryo', sans-serif;
@@ -31,34 +32,76 @@ ul, ol {
 	padding-top: 0;
 	padding-bottom: 0;
 }
-a:link {color:#379DB6; text-decoration: none;}
-a:visited {color:#379DB6;}
-a:hover {color:#379DB6; opacity: 0.5;}
-a:active {color:#379DB6;}
+a:link {color: #D8D7DD; text-decoration: underline;}
+a:visited {color: #D8D7DD;}
+a:hover {color: #D8D7DD; opacity: 0.8;}
+a:active {color: #D8D7DD;}
+
 
 /*======================================
 Common Styles
 =======================================*/
+.wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
 header {
-	padding: 3rem;
+	padding: 4rem 8px;
+    text-align: right;
 }
-header .logo {
-	width: 48px;
+.logo {
+	width: 60px;
 }
-a:hover {
-	opacity: 0.8;
-	filter: alpha(opacity=80);
+h2 {
+    font-size: 3rem;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    color: #E9E8EE;
+    padding-top: 5rem;
+}
+.product-wrapper,
+.contact-wrapper {
+    padding-top: 2.5rem;
+}
+.product-wrapper img {
+    width: 100%;
+}
+.product-wrapper h3 {
+    color: #E9E8EE;
+    font-size: 1rem;
+    padding-top: 0.5rem;
+}
+.contact-table {
+    display: table;
+    border-collapse: collapse;
+}
+.contact-table>div {
+    display: table-row;
+}
+.contact-table>div>div {
+    display: table-cell;
+    border: 0;
+    padding: 0 2rem 0.5rem 0;
 }
 footer {
-	position: absolute;
-	bottom: 0;
-	display:block;
-	width:100%;
-	font-size: 0.875em;
 	text-align: center;
+    color: #B1B0BB;
 	padding-bottom: 1.5rem;
+    padding-top: 5rem;
 }
 
+/*****for tablet*****/
+@media(max-width:960px){
+}/*****for tablet*****/
+
 /*****for mobile*****/
-@media(max-width:600px){
+@media(max-width:520px){
+.wrapper {
+    padding: 0 20px;
+}
+.logo {
+	width: 48px;
+}
 }/*****for mobile*****/
