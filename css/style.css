@@ -42,7 +42,7 @@ a:active {color: #D8D7DD;}
 Common Styles
 =======================================*/
 .wrapper {
-    max-width: 1200px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 0 40px;
 }
