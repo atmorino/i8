@@ -5,8 +5,8 @@ const ctx = canvas.getContext('2d');
 const constraints = {
     video: {
         facingMode: 'environment',
-        width: { ideal: 960 },
-        height: { ideal: 540 }
+        width: { ideal: 640 },
+        height: { ideal: 360 }
     }
 };
 
