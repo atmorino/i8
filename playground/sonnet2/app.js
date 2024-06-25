@@ -12,6 +12,8 @@ const constraints = {
 
 let lastProcessingTime = 0;
 const PROCESSING_INTERVAL = 500; // 0.5秒ごとに処理
+let lastDetections = []; // 直近の検出結果を保持
+const DETECTION_HISTORY = 3; // 保持する検出結果の数
 
 async function startCamera() {
     try {
@@ -43,7 +45,7 @@ function detectFieldLines(src) {
         let startPoint = new cv.Point(lines.data32S[i * 4], lines.data32S[i * 4 + 1]);
         let endPoint = new cv.Point(lines.data32S[i * 4 + 2], lines.data32S[i * 4 + 3]);
         let length = Math.hypot(endPoint.x - startPoint.x, endPoint.y - startPoint.y);
-        if (length > 50) { // フィルタリング: 短すぎる線は除外
+        if (length > 50) {
             fieldLines.push({startPoint, endPoint});
         }
     }
@@ -63,6 +65,56 @@ function drawFieldLines(fieldLines) {
     });
 }
 
+function drawDetections(detections) {
+    detections.forEach(detection => {
+        ctx.beginPath();
+        ctx.rect(
+            detection.bbox[0],
+            detection.bbox[1],
+            detection.bbox[2],
+            detection.bbox[3]
+        );
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = 'rgba(255, 0, 0, 0.7)';
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
+        ctx.stroke();
+        ctx.fillText(
+            `Person (${Math.round(detection.score * 100)}%)`,
+            detection.bbox[0],
+            detection.bbox[1] > 10 ? detection.bbox[1] - 5 : 10
+        );
+    });
+}
+
+function mergeDetections(detections) {
+    // 重複する検出結果をマージ
+    let mergedDetections = [];
+    detections.forEach(detection => {
+        let matchFound = false;
+        for (let i = 0; i < mergedDetections.length; i++) {
+            if (isSameDetection(mergedDetections[i], detection)) {
+                mergedDetections[i].score = Math.max(mergedDetections[i].score, detection.score);
+                matchFound = true;
+                break;
+            }
+        }
+        if (!matchFound) {
+            mergedDetections.push(detection);
+        }
+    });
+    return mergedDetections;
+}
+
+function isSameDetection(d1, d2) {
+    const iouThreshold = 0.5;
+    const intersection = (
+        Math.max(0, Math.min(d1.bbox[0] + d1.bbox[2], d2.bbox[0] + d2.bbox[2]) - Math.max(d1.bbox[0], d2.bbox[0])) *
+        Math.max(0, Math.min(d1.bbox[1] + d1.bbox[3], d2.bbox[1] + d2.bbox[3]) - Math.max(d1.bbox[1], d2.bbox[1]))
+    );
+    const union = d1.bbox[2] * d1.bbox[3] + d2.bbox[2] * d2.bbox[3] - intersection;
+    return intersection / union > iouThreshold;
+}
+
 async function detectObjects(model) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -76,28 +128,19 @@ async function detectObjects(model) {
         src.delete();
 
         const predictions = await model.detect(canvas);
+        const personDetections = predictions.filter(p => p.class === 'person' && p.score > 0.5);
 
-        predictions.forEach(prediction => {
-            if (prediction.class === 'person' && prediction.score > 0.5) {
-                ctx.beginPath();
-                ctx.rect(
-                    prediction.bbox[0],
-                    prediction.bbox[1],
-                    prediction.bbox[2],
-                    prediction.bbox[3]
-                );
-                ctx.lineWidth = 3;
-                ctx.strokeStyle = 'rgba(255, 0, 0, 0.7)';
-                ctx.fillStyle = 'rgba(255, 0, 0, 0.7)';
-                ctx.stroke();
-                ctx.fillText(
-                    `Person (${Math.round(prediction.score * 100)}%)`,
-                    prediction.bbox[0],
-                    prediction.bbox[1] > 10 ? prediction.bbox[1] - 5 : 10
-                );
-            }
-        });
+        lastDetections.push(personDetections);
+        if (lastDetections.length > DETECTION_HISTORY) {
+            lastDetections.shift();
+        }
     }
+
+    // 直近の検出結果をすべて結合し、重複を除去
+    const allDetections = [].concat(...lastDetections);
+    const mergedDetections = mergeDetections(allDetections);
+
+    drawDetections(mergedDetections);
 
     requestAnimationFrame(() => detectObjects(model));
 }
