@@ -2,14 +2,12 @@ const video = document.getElementById('video');
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
-// カメラの設定
 const constraints = {
     video: {
         facingMode: 'environment'
     }
 };
 
-// カメラストリームの開始
 async function startCamera() {
     try {
         const stream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -22,15 +20,54 @@ async function startCamera() {
     }
 }
 
-// 物体検出モデルの読み込み
 async function loadModel() {
     const model = await cocoSsd.load();
     return model;
 }
 
-// 検出の実行
+function detectFieldLines(src) {
+    let dst = new cv.Mat();
+    let lines = new cv.Mat();
+    cv.cvtColor(src, dst, cv.COLOR_RGBA2GRAY);
+    cv.Canny(dst, dst, 50, 200, 3);
+    cv.HoughLines(dst, lines, 1, Math.PI / 180, 150, 0, 0, 0, Math.PI);
+
+    let fieldLines = [];
+    for (let i = 0; i < lines.rows; ++i) {
+        let rho = lines.data32F[i * 2];
+        let theta = lines.data32F[i * 2 + 1];
+        let a = Math.cos(theta);
+        let b = Math.sin(theta);
+        let x0 = a * rho;
+        let y0 = b * rho;
+        let startPoint = {x: x0 - 1000 * b, y: y0 + 1000 * a};
+        let endPoint = {x: x0 + 1000 * b, y: y0 - 1000 * a};
+        fieldLines.push({startPoint, endPoint});
+    }
+
+    dst.delete(); lines.delete();
+    return fieldLines;
+}
+
+function drawFieldLines(fieldLines) {
+    fieldLines.forEach(line => {
+        ctx.beginPath();
+        ctx.moveTo(line.startPoint.x, line.startPoint.y);
+        ctx.lineTo(line.endPoint.x, line.endPoint.y);
+        ctx.strokeStyle = 'green';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+    });
+}
+
 async function detectObjects(model) {
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    let src = cv.imread(canvas);
+    let fieldLines = detectFieldLines(src);
+    drawFieldLines(fieldLines);
+    src.delete();
+
     const predictions = await model.detect(canvas);
 
     predictions.forEach(prediction => {
@@ -57,9 +94,15 @@ async function detectObjects(model) {
     requestAnimationFrame(() => detectObjects(model));
 }
 
-// メイン関数
 async function main() {
     await startCamera();
+
+    // OpenCVの準備ができるまで待機
+    await new Promise(resolve => {
+        if (cv.Mat) resolve();
+        else cv['onRuntimeInitialized'] = resolve;
+    });
+
     const model = await loadModel();
     detectObjects(model);
 }
