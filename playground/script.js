@@ -4,7 +4,7 @@ const ctx = canvas.getContext('2d');
 
 async function setupCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'user' }
+        video: { facingMode: 'environment' }
     });
     video.srcObject = stream;
     return new Promise((resolve) => {
