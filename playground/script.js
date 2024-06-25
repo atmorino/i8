@@ -4,7 +4,11 @@ const ctx = canvas.getContext('2d');
 
 async function setupCamera() {
     const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: 'environment' }
+        video: { 
+            facingMode: 'environment',
+            width: { ideal: 1280 },  // 解像度を高く設定
+            height: { ideal: 720 }   // 解像度を高く設定
+        }
     });
     video.srcObject = stream;
     return new Promise((resolve) => {
@@ -44,9 +48,10 @@ async function main() {
     canvas.height = video.videoHeight;
 
     const model = await cocoSsd.load();
+    const frameRate = 200;  // 推論の頻度を調整
     setInterval(() => {
         detectHumans(model);
-    }, 100);
+    }, frameRate);
 }
 
 main();
