@@ -3,21 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Complex Mermaid Flowchart</title>
+    <title>Mermaid Flowchart in Table</title>
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
+        
+        window.addEventListener('load', () => {
+            mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+            const svg = document.querySelector('svg');
+            if (svg) {
+                const nodes = Array.from(svg.querySelectorAll('.node'));
+                const table = document.getElementById('flowchart-table');
+                nodes.forEach(node => {
+                    const rect = node.querySelector('rect');
+                    const text = node.querySelector('text');
+                    const nodeText = text ? text.textContent : '';
+                    const row = table.insertRow();
+                    const cell = row.insertCell();
+                    cell.innerHTML = nodeText;
+                    cell.style.border = '1px solid black';
+                    cell.style.padding = '10px';
+                    cell.style.textAlign = 'center';
+                });
+            }
+        });
     </script>
 </head>
 <body>
     <div class="mermaid">
-        graph LR;
-            Start-->Step1["Step 1"];
-            Step1-->Step2["Step 2"];
-            Step2-->Step3["Step 3"];
-            Step3-->End;
-            Step2-->AlternativePath["Alternative Path"];
-            AlternativePath-->End;
+        graph TD;
+            A[Start] --> B[Step 1];
+            B --> C[Step 2];
+            C --> D[Step 3];
+            C --> E[Alternative Path];
+            E --> F[End];
     </div>
+
+    <table id="flowchart-table" style="width: 100%; border-collapse: collapse;">
+    </table>
 </body>
 </html>
