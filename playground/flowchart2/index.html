@@ -46,14 +46,18 @@
             ctx.fill();
         }
 
-        // Draw long arrow (A -> D)
+        // Draw long arrow (A -> D) avoiding boxes B and C
         const startXAtoD = boxes[0].x + boxWidth;
         const startYAtoD = boxes[0].y + 2 * boxes[0].height / 3;
+        const midXAtoD = startXAtoD + 3 * (boxes[3].x - startXAtoD) / 4;
         const endXAtoD = boxes[3].x;
         const endYAtoD = startYAtoD;
 
         ctx.beginPath();
         ctx.moveTo(startXAtoD, startYAtoD);
+        ctx.lineTo(startXAtoD, startYAtoD + 40);
+        ctx.lineTo(midXAtoD, startYAtoD + 40);
+        ctx.lineTo(midXAtoD, endYAtoD);
         ctx.lineTo(endXAtoD, endYAtoD);
         ctx.stroke();
 
