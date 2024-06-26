@@ -75,23 +75,19 @@ function generateFlowchart() {
         const fromIndex = nodes.indexOf(from);
         const toIndex = nodes.indexOf(to);
         const fromHeight = boxHeights[from];
-        const toHeight = boxHeights[to];
         const outputIndex = connections.filter(conn => conn[0] === from).indexOf([from, to]);
-        const inputIndex = connections.filter(conn => conn[1] === to).indexOf([from, to]);
-        
         const startY = (outputIndex + 1) * (fromHeight / (connections.filter(conn => conn[0] === from).length + 1));
-        const endY = (inputIndex + 1) * (toHeight / (connections.filter(conn => conn[1] === to).length + 1));
         
         ctx.beginPath();
         ctx.moveTo(fromIndex * (boxWidth + boxSpacing) + boxWidth, startY);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing), endY);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing), startY);
         ctx.stroke();
 
         // 矢印の先端を描画
         ctx.beginPath();
-        ctx.moveTo(toIndex * (boxWidth + boxSpacing) - 10, endY - 5);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing), endY);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing) - 10, endY + 5);
+        ctx.moveTo(toIndex * (boxWidth + boxSpacing) - 10, startY - 5);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing), startY);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing) - 10, startY + 5);
         ctx.stroke();
     });
 }
