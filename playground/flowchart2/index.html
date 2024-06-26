@@ -2,68 +2,47 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>フローチャート</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>フローチャート描画</title>
+    <style>
+        .chart-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .node {
+            display: inline-block;
+            padding: 10px;
+            margin: 10px;
+            border: 1px solid black;
+            text-align: center;
+        }
+        .line {
+            width: 100%;
+            height: 1px;
+            background-color: black;
+            position: relative;
+        }
+        .line:after {
+            content: '>';
+            position: absolute;
+            right: -10px;
+            top: -7px;
+        }
+    </style>
 </head>
 <body>
-    <canvas id="flowchartCanvas" width="800" height="300" style="border:1px solid #000000;"></canvas>
-    <script>
-        const canvas = document.getElementById('flowchartCanvas');
-        const ctx = canvas.getContext('2d');
+    <div>
+        <label for="nodes">ノード (カンマ区切り):</label>
+        <input type="text" id="nodes" placeholder="例: A,B,C,D">
+    </div>
+    <div>
+        <label for="connections">接続 (例: A->B, B->C):</label>
+        <input type="text" id="connections" placeholder="例: A->B, B->C">
+    </div>
+    <button onclick="drawChart()">描画</button>
+    <div id="chart" class="chart-container"></div>
 
-        const boxes = [
-            {label: 'A', x: 50, y: 50, height: 80},
-            {label: 'B', x: 250, y: 100, height: 50},
-            {label: 'C', x: 450, y: 100, height: 50},
-            {label: 'D', x: 650, y: 50, height: 80}
-        ];
-
-        const boxWidth = 50;
-
-        // Draw boxes
-        boxes.forEach(box => {
-            ctx.strokeRect(box.x, box.y, boxWidth, box.height);
-            ctx.fillText(box.label, box.x + boxWidth / 2 - 5, box.y + box.height / 2 + 5);
-        });
-
-        // Draw short arrows (A -> B, B -> C, C -> D)
-        for (let i = 0; i < boxes.length - 1; i++) {
-            const startX = boxes[i].x + boxWidth;
-            const startY = boxes[i].y + 20; // Adjusted to ensure horizontal alignment
-            const endX = boxes[i + 1].x;
-            const endY = boxes[i + 1].y + 20; // Adjusted to ensure horizontal alignment
-
-            ctx.beginPath();
-            ctx.moveTo(startX, startY);
-            ctx.lineTo(endX, endY);
-            ctx.stroke();
-
-            // Draw arrowhead
-            ctx.beginPath();
-            ctx.moveTo(endX, endY);
-            ctx.lineTo(endX - 5, endY - 5);
-            ctx.lineTo(endX - 5, endY + 5);
-            ctx.closePath();
-            ctx.fill();
-        }
-
-        // Draw long arrow (A -> D)
-        const startXAtoD = boxes[0].x + boxWidth;
-        const startYAtoD = boxes[0].y + 60; // Adjusted to ensure horizontal alignment
-        const endXAtoD = boxes[3].x;
-        const endYAtoD = boxes[3].y + 60; // Adjusted to ensure horizontal alignment
-
-        ctx.beginPath();
-        ctx.moveTo(startXAtoD, startYAtoD);
-        ctx.lineTo(endXAtoD, endYAtoD);
-        ctx.stroke();
-
-        // Draw arrowhead for A to D
-        ctx.beginPath();
-        ctx.moveTo(endXAtoD, endYAtoD);
-        ctx.lineTo(endXAtoD - 5, endYAtoD - 5);
-        ctx.lineTo(endXAtoD - 5, endYAtoD + 5);
-        ctx.closePath();
-        ctx.fill();
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
