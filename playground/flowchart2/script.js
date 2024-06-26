@@ -17,7 +17,6 @@ function drawChart() {
         const nodeElement = document.createElement('div');
         nodeElement.className = 'node';
         nodeElement.textContent = node;
-        nodeElement.style.position = 'absolute';
         nodeElement.style.left = `${index * (nodeWidth + nodeSpacing)}px`;
         nodeElement.style.top = '50px';
         nodeElements[node] = nodeElement;
@@ -40,6 +39,12 @@ function drawChart() {
             line.style.top = `${fromRect.top + fromRect.height / 2 - containerRect.top}px`;
             line.style.width = `${toRect.left - fromRect.right}px`;
             chartContainer.appendChild(line);
+
+            const arrow = document.createElement('div');
+            arrow.className = 'arrow right';
+            arrow.style.left = `${toRect.left - containerRect.left - 8}px`;
+            arrow.style.top = `${fromRect.top + fromRect.height / 2 - containerRect.top - 8}px`;
+            chartContainer.appendChild(arrow);
         }
     });
 }
