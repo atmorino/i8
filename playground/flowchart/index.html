@@ -8,6 +8,9 @@
         #flowchart {
             border: 1px solid black;
         }
+        #connectionsList {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -21,6 +24,7 @@
         <select id="toNode"></select>
         <button onclick="addConnection()">接続を追加</button>
     </div>
+    <div id="connectionsList"></div>
     <button onclick="generateFlowchart()">フローチャートを生成</button>
     <canvas id="flowchart" width="800" height="400"></canvas>
 

@@ -15,6 +15,7 @@ function addConnection() {
     const toNode = document.getElementById('toNode').value;
     if (fromNode && toNode && fromNode !== toNode) {
         connections.push([fromNode, toNode]);
+        updateConnectionsList();
     }
 }
 
@@ -30,6 +31,18 @@ function updateNodeSelects() {
             select.appendChild(option);
         });
     });
+}
+
+function updateConnectionsList() {
+    const connectionsList = document.getElementById('connectionsList');
+    connectionsList.innerHTML = '<h3>現在の接続:</h3>';
+    const ul = document.createElement('ul');
+    connections.forEach(([from, to]) => {
+        const li = document.createElement('li');
+        li.textContent = `${from} → ${to}`;
+        ul.appendChild(li);
+    });
+    connectionsList.appendChild(ul);
 }
 
 function generateFlowchart() {
@@ -75,3 +88,7 @@ function generateFlowchart() {
         ctx.stroke();
     });
 }
+
+// 初期化時に呼び出し
+updateNodeSelects();
+updateConnectionsList();
