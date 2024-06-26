@@ -32,12 +32,12 @@ function drawChart() {
 
             const fromRect = fromElement.getBoundingClientRect();
             const toRect = toElement.getBoundingClientRect();
+            const containerRect = chartContainer.getBoundingClientRect();
 
             const line = document.createElement('div');
             line.className = 'line';
-            line.style.position = 'absolute';
-            line.style.left = `${fromRect.right}px`;
-            line.style.top = `${fromRect.top + fromRect.height / 2}px`;
+            line.style.left = `${fromRect.right - containerRect.left}px`;
+            line.style.top = `${fromRect.top + fromRect.height / 2 - containerRect.top}px`;
             line.style.width = `${toRect.left - fromRect.right}px`;
             chartContainer.appendChild(line);
         }
