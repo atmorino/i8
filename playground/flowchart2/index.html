@@ -11,10 +11,10 @@
         const ctx = canvas.getContext('2d');
 
         const boxes = [
-            {label: 'A', x: 50, y: 50, height: 50},
-            {label: 'B', x: 250, y: 50, height: 50},
-            {label: 'C', x: 450, y: 50, height: 50},
-            {label: 'D', x: 650, y: 50, height: 50}
+            {label: 'A', x: 50, y: 50, height: 80},
+            {label: 'B', x: 250, y: 100, height: 50},
+            {label: 'C', x: 450, y: 100, height: 50},
+            {label: 'D', x: 650, y: 50, height: 80}
         ];
 
         const boxWidth = 50;
@@ -28,9 +28,9 @@
         // Draw short arrows (A -> B, B -> C, C -> D)
         for (let i = 0; i < boxes.length - 1; i++) {
             const startX = boxes[i].x + boxWidth;
-            const startY = boxes[i].y + boxes[i].height / 3;
+            const startY = boxes[i].y + 20; // Adjusted to ensure horizontal alignment
             const endX = boxes[i + 1].x;
-            const endY = startY;
+            const endY = boxes[i + 1].y + 20; // Adjusted to ensure horizontal alignment
 
             ctx.beginPath();
             ctx.moveTo(startX, startY);
@@ -46,18 +46,14 @@
             ctx.fill();
         }
 
-        // Draw long arrow (A -> D) avoiding boxes B and C
+        // Draw long arrow (A -> D)
         const startXAtoD = boxes[0].x + boxWidth;
-        const startYAtoD = boxes[0].y + 2 * boxes[0].height / 3;
-        const midXAtoD = startXAtoD + 3 * (boxes[3].x - startXAtoD) / 4;
+        const startYAtoD = boxes[0].y + 60; // Adjusted to ensure horizontal alignment
         const endXAtoD = boxes[3].x;
-        const endYAtoD = startYAtoD;
+        const endYAtoD = boxes[3].y + 60; // Adjusted to ensure horizontal alignment
 
         ctx.beginPath();
         ctx.moveTo(startXAtoD, startYAtoD);
-        ctx.lineTo(startXAtoD, startYAtoD + 40);
-        ctx.lineTo(midXAtoD, startYAtoD + 40);
-        ctx.lineTo(midXAtoD, endYAtoD);
         ctx.lineTo(endXAtoD, endYAtoD);
         ctx.stroke();
 
