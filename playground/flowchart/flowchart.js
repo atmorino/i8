@@ -66,8 +66,10 @@ function generateFlowchart() {
 
     // ステップ2: ボックスを配置
     nodes.forEach((node, i) => {
-        ctx.strokeRect(i * (boxWidth + boxSpacing), 0, boxWidth, boxHeights[node]);
-        ctx.fillText(node, i * (boxWidth + boxSpacing) + 5, 20);
+        const boxHeight = boxHeights[node];
+        const y = 0; // ボックスの上端のy座標
+        ctx.strokeRect(i * (boxWidth + boxSpacing), y, boxWidth, boxHeight);
+        ctx.fillText(node, i * (boxWidth + boxSpacing) + 5, y + 20);
     });
 
     // ステップ3: 矢印を描画
@@ -76,22 +78,21 @@ function generateFlowchart() {
         const toIndex = nodes.indexOf(to);
         const fromHeight = boxHeights[from];
         const toHeight = boxHeights[to];
-        const outputCount = connections.filter(conn => conn[0] === from).length;
-        const outputIndex = connections.filter(conn => conn[0] === from).indexOf([from, to]);
         
-        const startY = (outputIndex + 1) * (fromHeight / (outputCount + 1));
-        const endY = (outputIndex + 1) * (toHeight / (outputCount + 1));
+        // ボックスの中央のy座標を計算
+        const fromCenterY = fromHeight / 2;
+        const toCenterY = toHeight / 2;
         
         ctx.beginPath();
-        ctx.moveTo(fromIndex * (boxWidth + boxSpacing) + boxWidth, startY);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing), endY);
+        ctx.moveTo(fromIndex * (boxWidth + boxSpacing) + boxWidth, fromCenterY);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing), toCenterY);
         ctx.stroke();
 
         // 矢印の先端を描画
         ctx.beginPath();
-        ctx.moveTo(toIndex * (boxWidth + boxSpacing) - 10, endY - 5);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing), endY);
-        ctx.lineTo(toIndex * (boxWidth + boxSpacing) - 10, endY + 5);
+        ctx.moveTo(toIndex * (boxWidth + boxSpacing) - 10, toCenterY - 5);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing), toCenterY);
+        ctx.lineTo(toIndex * (boxWidth + boxSpacing) - 10, toCenterY + 5);
         ctx.stroke();
     });
 }
