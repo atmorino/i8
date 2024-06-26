@@ -12,8 +12,8 @@
 
         const boxes = [
             {label: 'A', x: 50, y: 50, height: 50},
-            {label: 'B', x: 250, y: 100, height: 30},
-            {label: 'C', x: 450, y: 100, height: 30},
+            {label: 'B', x: 250, y: 50, height: 50},
+            {label: 'C', x: 450, y: 50, height: 50},
             {label: 'D', x: 650, y: 50, height: 50}
         ];
 
@@ -25,12 +25,12 @@
             ctx.fillText(box.label, box.x + boxWidth / 2 - 5, box.y + box.height / 2 + 5);
         });
 
-        // Draw arrows
+        // Draw short arrows (A -> B, B -> C, C -> D)
         for (let i = 0; i < boxes.length - 1; i++) {
             const startX = boxes[i].x + boxWidth;
-            const startY = boxes[i].y + boxes[i].height / 2;
+            const startY = boxes[i].y + boxes[i].height / 3;
             const endX = boxes[i + 1].x;
-            const endY = boxes[i + 1].y + boxes[i + 1].height / 2;
+            const endY = startY;
 
             ctx.beginPath();
             ctx.moveTo(startX, startY);
@@ -46,11 +46,11 @@
             ctx.fill();
         }
 
-        // Draw arrow from A to D
+        // Draw long arrow (A -> D)
         const startXAtoD = boxes[0].x + boxWidth;
-        const startYAtoD = boxes[0].y + boxes[0].height / 2;
+        const startYAtoD = boxes[0].y + 2 * boxes[0].height / 3;
         const endXAtoD = boxes[3].x;
-        const endYAtoD = boxes[3].y + boxes[3].height / 2;
+        const endYAtoD = startYAtoD;
 
         ctx.beginPath();
         ctx.moveTo(startXAtoD, startYAtoD);
