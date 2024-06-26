@@ -1,52 +1,4 @@
-let nodes = [];
-let connections = [];
-
-function addNode() {
-    const nodeName = document.getElementById('nodeName').value;
-    if (nodeName && !nodes.includes(nodeName)) {
-        nodes.push(nodeName);
-        updateNodeSelects();
-        document.getElementById('nodeName').value = '';
-    }
-}
-
-function addConnection() {
-    const fromNode = document.getElementById('fromNode').value;
-    const toNode = document.getElementById('toNode').value;
-    if (fromNode && toNode && fromNode !== toNode) {
-        connections.push([fromNode, toNode]);
-        updateConnectionsList();
-    }
-}
-
-function updateNodeSelects() {
-    const selects = ['fromNode', 'toNode'];
-    selects.forEach(selectId => {
-        const select = document.getElementById(selectId);
-        select.innerHTML = '';
-        nodes.forEach(node => {
-            const option = document.createElement('option');
-            option.value = node;
-            option.textContent = node;
-            select.appendChild(option);
-        });
-    });
-}
-
-function updateConnectionsList() {
-    const connectionsList = document.getElementById('connectionsList');
-    connectionsList.innerHTML = '<h3>現在の接続:</h3>';
-    const ul = document.createElement('ul');
-    connections.forEach(([from, to]) => {
-        const li = document.createElement('li');
-        li.textContent = `${from} → ${to}`;
-        ul.appendChild(li);
-    });
-    connectionsList.appendChild(ul);
-}
-
 function generateFlowchart() {
-    // フローチャート情報のテキスト表示
     displayFlowchartInfo();
 
     const canvas = document.getElementById('flowchart');
@@ -75,7 +27,9 @@ function generateFlowchart() {
         const fromIndex = nodes.indexOf(from);
         const toIndex = nodes.indexOf(to);
         const fromHeight = boxHeights[from];
-        const outputIndex = connections.filter(conn => conn[0] === from).indexOf([from, to]);
+        
+        // 出力インデックスの計算を修正
+        const outputIndex = connections.filter(conn => conn[0] === from).findIndex(conn => conn[0] === from && conn[1] === to);
         const startY = (outputIndex + 1) * (fromHeight / (connections.filter(conn => conn[0] === from).length + 1));
         
         ctx.beginPath();
@@ -91,30 +45,3 @@ function generateFlowchart() {
         ctx.stroke();
     });
 }
-
-function displayFlowchartInfo() {
-    const flowchartInfo = document.getElementById('flowchartInfo');
-    flowchartInfo.innerHTML = '<h3>フローチャート情報:</h3>';
-    
-    // ノード情報
-    const nodeInfo = document.createElement('p');
-    nodeInfo.textContent = `ノード: ${nodes.join(', ')}`;
-    flowchartInfo.appendChild(nodeInfo);
-
-    // 接続情報
-    const connectionInfo = document.createElement('p');
-    connectionInfo.textContent = '接続:';
-    flowchartInfo.appendChild(connectionInfo);
-
-    const connectionList = document.createElement('ul');
-    connections.forEach(([from, to]) => {
-        const li = document.createElement('li');
-        li.textContent = `${from} → ${to}`;
-        connectionList.appendChild(li);
-    });
-    flowchartInfo.appendChild(connectionList);
-}
-
-// 初期化時に呼び出し
-updateNodeSelects();
-updateConnectionsList();
