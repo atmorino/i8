@@ -46,6 +46,9 @@ function updateConnectionsList() {
 }
 
 function generateFlowchart() {
+    // フローチャート情報のテキスト表示
+    displayFlowchartInfo();
+
     const canvas = document.getElementById('flowchart');
     const ctx = canvas.getContext('2d');
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -87,6 +90,29 @@ function generateFlowchart() {
         ctx.lineTo(toIndex * (boxWidth + boxSpacing) - 10, startY + 5);
         ctx.stroke();
     });
+}
+
+function displayFlowchartInfo() {
+    const flowchartInfo = document.getElementById('flowchartInfo');
+    flowchartInfo.innerHTML = '<h3>フローチャート情報:</h3>';
+    
+    // ノード情報
+    const nodeInfo = document.createElement('p');
+    nodeInfo.textContent = `ノード: ${nodes.join(', ')}`;
+    flowchartInfo.appendChild(nodeInfo);
+
+    // 接続情報
+    const connectionInfo = document.createElement('p');
+    connectionInfo.textContent = '接続:';
+    flowchartInfo.appendChild(connectionInfo);
+
+    const connectionList = document.createElement('ul');
+    connections.forEach(([from, to]) => {
+        const li = document.createElement('li');
+        li.textContent = `${from} → ${to}`;
+        connectionList.appendChild(li);
+    });
+    flowchartInfo.appendChild(connectionList);
 }
 
 // 初期化時に呼び出し
