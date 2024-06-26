@@ -2,7 +2,7 @@ let nodes = [];
 let connections = [];
 
 function addNode() {
-    const nodeName = document.getElementById('nodeName').value.trim();
+    const nodeName = document.getElementById('nodeName').value;
     if (nodeName && !nodes.includes(nodeName)) {
         nodes.push(nodeName);
         updateNodeSelects();
@@ -23,7 +23,6 @@ function updateNodeSelects() {
     const selects = ['fromNode', 'toNode'];
     selects.forEach(selectId => {
         const select = document.getElementById(selectId);
-        const currentValue = select.value;
         select.innerHTML = '';
         nodes.forEach(node => {
             const option = document.createElement('option');
@@ -31,9 +30,6 @@ function updateNodeSelects() {
             option.textContent = node;
             select.appendChild(option);
         });
-        if (nodes.includes(currentValue)) {
-            select.value = currentValue;
-        }
     });
 }
 
@@ -78,8 +74,7 @@ function generateFlowchart() {
         const fromIndex = nodes.indexOf(from);
         const toIndex = nodes.indexOf(to);
         const fromHeight = boxHeights[from];
-        
-        const outputIndex = connections.filter(conn => conn[0] === from).findIndex(conn => conn[0] === from && conn[1] === to);
+        const outputIndex = connections.filter(conn => conn[0] === from).indexOf([from, to]);
         const startY = (outputIndex + 1) * (fromHeight / (connections.filter(conn => conn[0] === from).length + 1));
         
         ctx.beginPath();
