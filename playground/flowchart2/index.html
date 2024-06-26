@@ -5,33 +5,32 @@
     <title>フローチャート</title>
 </head>
 <body>
-    <canvas id="flowchartCanvas" width="800" height="200" style="border:1px solid #000000;"></canvas>
+    <canvas id="flowchartCanvas" width="800" height="300" style="border:1px solid #000000;"></canvas>
     <script>
         const canvas = document.getElementById('flowchartCanvas');
         const ctx = canvas.getContext('2d');
 
         const boxes = [
-            {label: 'A', x: 50, y: 75},
-            {label: 'B', x: 250, y: 75},
-            {label: 'C', x: 450, y: 75},
-            {label: 'D', x: 650, y: 75}
+            {label: 'A', x: 50, y: 50, height: 50},
+            {label: 'B', x: 250, y: 100, height: 30},
+            {label: 'C', x: 450, y: 100, height: 30},
+            {label: 'D', x: 650, y: 50, height: 50}
         ];
 
         const boxWidth = 50;
-        const boxHeight = 30;
 
         // Draw boxes
         boxes.forEach(box => {
-            ctx.strokeRect(box.x, box.y, boxWidth, boxHeight);
-            ctx.fillText(box.label, box.x + boxWidth / 2 - 5, box.y + boxHeight / 2 + 5);
+            ctx.strokeRect(box.x, box.y, boxWidth, box.height);
+            ctx.fillText(box.label, box.x + boxWidth / 2 - 5, box.y + box.height / 2 + 5);
         });
 
         // Draw arrows
         for (let i = 0; i < boxes.length - 1; i++) {
             const startX = boxes[i].x + boxWidth;
-            const startY = boxes[i].y + boxHeight / 2;
+            const startY = boxes[i].y + boxes[i].height / 2;
             const endX = boxes[i + 1].x;
-            const endY = boxes[i + 1].y + boxHeight / 2;
+            const endY = boxes[i + 1].y + boxes[i + 1].height / 2;
 
             ctx.beginPath();
             ctx.moveTo(startX, startY);
@@ -46,6 +45,25 @@
             ctx.closePath();
             ctx.fill();
         }
+
+        // Draw arrow from A to D
+        const startXAtoD = boxes[0].x + boxWidth;
+        const startYAtoD = boxes[0].y + boxes[0].height / 2;
+        const endXAtoD = boxes[3].x;
+        const endYAtoD = boxes[3].y + boxes[3].height / 2;
+
+        ctx.beginPath();
+        ctx.moveTo(startXAtoD, startYAtoD);
+        ctx.lineTo(endXAtoD, endYAtoD);
+        ctx.stroke();
+
+        // Draw arrowhead for A to D
+        ctx.beginPath();
+        ctx.moveTo(endXAtoD, endYAtoD);
+        ctx.lineTo(endXAtoD - 5, endYAtoD - 5);
+        ctx.lineTo(endXAtoD - 5, endYAtoD + 5);
+        ctx.closePath();
+        ctx.fill();
     </script>
 </body>
 </html>
