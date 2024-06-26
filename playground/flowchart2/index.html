@@ -7,27 +7,45 @@
     <script type="module">
         import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
         mermaid.initialize({ startOnLoad: true });
-        
+
         window.addEventListener('load', () => {
             mermaid.init(undefined, document.querySelectorAll('.mermaid'));
-            const svg = document.querySelector('svg');
-            if (svg) {
-                const nodes = Array.from(svg.querySelectorAll('.node'));
-                const table = document.getElementById('flowchart-table');
-                nodes.forEach(node => {
-                    const rect = node.querySelector('rect');
-                    const text = node.querySelector('text');
-                    const nodeText = text ? text.textContent : '';
-                    const row = table.insertRow();
-                    const cell = row.insertCell();
-                    cell.innerHTML = nodeText;
-                    cell.style.border = '1px solid black';
-                    cell.style.padding = '10px';
-                    cell.style.textAlign = 'center';
-                });
-            }
+            setTimeout(() => {
+                const svg = document.querySelector('svg');
+                if (svg) {
+                    const nodes = Array.from(svg.querySelectorAll('.node'));
+                    const table = document.getElementById('flowchart-table');
+                    nodes.forEach((node, index) => {
+                        const rect = node.querySelector('rect');
+                        const text = node.querySelector('text');
+                        const nodeText = text ? text.textContent : '';
+                        let row;
+                        if (index % 2 === 0) {
+                            row = table.insertRow();
+                        } else {
+                            row = table.rows[table.rows.length - 1];
+                        }
+                        const cell = row.insertCell();
+                        cell.innerHTML = nodeText;
+                        cell.style.border = '1px solid black';
+                        cell.style.padding = '10px';
+                        cell.style.textAlign = 'center';
+                    });
+                }
+            }, 1000); // Adding a delay to ensure Mermaid rendering is complete
         });
     </script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td {
+            border: 1px solid black;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
     <div class="mermaid">
@@ -39,7 +57,7 @@
             E --> F[End];
     </div>
 
-    <table id="flowchart-table" style="width: 100%; border-collapse: collapse;">
+    <table id="flowchart-table">
     </table>
 </body>
 </html>
