@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>フローチャート</title>
+</head>
+<body>
+    <canvas id="flowchartCanvas" width="800" height="200" style="border:1px solid #000000;"></canvas>
+    <script>
+        const canvas = document.getElementById('flowchartCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const boxes = [
+            {label: 'A', x: 50, y: 75},
+            {label: 'B', x: 250, y: 75},
+            {label: 'C', x: 450, y: 75},
+            {label: 'D', x: 650, y: 75}
+        ];
+
+        const boxWidth = 50;
+        const boxHeight = 30;
+
+        // Draw boxes
+        boxes.forEach(box => {
+            ctx.strokeRect(box.x, box.y, boxWidth, boxHeight);
+            ctx.fillText(box.label, box.x + boxWidth / 2 - 5, box.y + boxHeight / 2 + 5);
+        });
+
+        // Draw arrows
+        for (let i = 0; i < boxes.length - 1; i++) {
+            const startX = boxes[i].x + boxWidth;
+            const startY = boxes[i].y + boxHeight / 2;
+            const endX = boxes[i + 1].x;
+            const endY = boxes[i + 1].y + boxHeight / 2;
+
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+            ctx.lineTo(endX, endY);
+            ctx.stroke();
+
+            // Draw arrowhead
+            ctx.beginPath();
+            ctx.moveTo(endX, endY);
+            ctx.lineTo(endX - 5, endY - 5);
+            ctx.lineTo(endX - 5, endY + 5);
+            ctx.closePath();
+            ctx.fill();
+        }
+    </script>
+</body>
+</html>
